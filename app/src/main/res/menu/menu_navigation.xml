@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/dashboard"
+        android:title="Dashboard"
+        android:icon="@drawable/ic_dashboard"/>
+
+    <item
+        android:id="@+id/home"
+        android:title="Profile"
+        android:icon="@drawable/ic_home"/>
+
+    <item
+        android:id="@+id/clients"
+        android:title="Clients"
+        android:icon="@drawable/ic_people"/>
+
+
+</menu>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.creuenterprise.bergman.feburary2020">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".UI.DB.RegisterActivity" android:noHistory="true" />
+        <activity android:name=".UI.Activity_Home" />
+        <activity
+            android:name=".UI.activity_createclient"
+            android:parentActivityName=".UI.Activity_clientlist" />
+        <activity
+            android:name=".UI.ClientDashboardActivity"
+            android:parentActivityName=".UI.Activity_clientlist" />
+        <activity android:name=".UI.DashboardActivity" />
+        <activity android:name=".UI.Activity_clientlist" />
+        <activity android:name=".UI.DB.LoginActivity" android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
