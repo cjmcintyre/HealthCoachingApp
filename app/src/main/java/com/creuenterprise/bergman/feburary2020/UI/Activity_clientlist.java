@@ -3,22 +3,42 @@ package com.creuenterprise.bergman.feburary2020.UI;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.bluetooth.le.AdvertiseData;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.creuenterprise.bergman.feburary2020.R;
+import com.creuenterprise.bergman.feburary2020.UTILS.Client;
+import com.creuenterprise.bergman.feburary2020.UTILS.ClientList;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Activity_clientlist extends AppCompatActivity {
 
-    ListView clientList;
+    ListView listview_clientList;
     Intent myIntent;
+    DatabaseReference databaseClients;
+    List <Client> ListOfClients;
+    private FirebaseUser user;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +46,11 @@ public class Activity_clientlist extends AppCompatActivity {
         setContentView(R.layout.activity_clientlist);
 
         //Initialize
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        ListOfClients = new ArrayList<>();
+        databaseClients = FirebaseDatabase.getInstance().getReference("clients").child(user.getUid());
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        clientList = findViewById(R.id.clientlistview);
+        listview_clientList = findViewById(R.id.clientlistview);
         myIntent = new Intent(this, ClientDashboardActivity.class);
 
         /*******************************
@@ -58,17 +81,45 @@ public class Activity_clientlist extends AppCompatActivity {
             }
         });
 
-        /*******************************
-         * ListView
-         */
-        String[ ] myData = {"Visual Basic .NET", "Java", "Android", "C# .NET",
-                "PHP", "C++", "Scala", "Ruby on Rails", "Javascript", "HTML", "Python", "Swift"
-                ,"other","other2","other3","other4"};
 
-        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>( this, android.R.layout.simple_list_item_1, myData );
-        clientList.setAdapter(myAdapter);
-        clientList.setOnItemClickListener( listClick );
+
+       // ArrayAdapter<String> myAdapter = new ArrayAdapter<String>( this, android.R.layout.simple_list_item_1);
+       // listview_clientList.setAdapter(myAdapter);
+       // listview_clientList.setOnItemClickListener( listClick );
     }
+
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+
+        databaseClients.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                ListOfClients.clear();
+
+                //Iterate through all the objects in the database
+                for(DataSnapshot clientSnapshot : dataSnapshot.getChildren())
+                {
+                    Client client = clientSnapshot.getValue(Client.class);
+                    ListOfClients.add(client);
+                }
+
+                ClientList adapter = new ClientList(Activity_clientlist.this,ListOfClients);
+                listview_clientList.setAdapter(adapter);
+                //listview_clientList.setOnItemClickListener( listClick );
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
 
     /*********************************
      * Creates top menu / checks touch
@@ -102,7 +153,7 @@ public class Activity_clientlist extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
-            String itemValue = (String) clientList.getItemAtPosition( position );
+            String itemValue = (String) listview_clientList.getItemAtPosition( position );
             myIntent.putExtra("COURSE_SELECTED", itemValue); //key, data
             startActivity(myIntent);
             overridePendingTransition(0,0);

@@ -26,7 +26,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     ProgressBar progressBar;
 
 
-    @Override
+   @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
@@ -40,7 +40,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         editTextEmail = findViewById(R.id.text_email);
         editTextPassword = findViewById(R.id.edit_text_password);
         progressBar = findViewById(R.id.progressbar);
-
     }
 
     @Override

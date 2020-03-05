@@ -27,13 +27,14 @@ public class Activity_Home extends AppCompatActivity implements View.OnClickList
     EditText editTextName;
     TextView textEmail,textPhoneNumber,textEmailVerified;
     ProgressBar progressBar;
-    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity__home);
 
+        user = FirebaseAuth.getInstance().getCurrentUser();
         editTextName = findViewById(R.id.edit_text_name);
         textEmail = findViewById(R.id.text_email);
         //textPhoneNumber = findViewById(R.id.text_phone);
@@ -42,6 +43,7 @@ public class Activity_Home extends AppCompatActivity implements View.OnClickList
 
         findViewById(R.id.text_not_verified).setOnClickListener(this);
         findViewById(R.id.button_save).setOnClickListener(this);
+
 
         if(user!=null)
         {
